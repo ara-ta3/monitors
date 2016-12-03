@@ -1,0 +1,22 @@
+{
+    "monitors": [
+        {
+            "id": "2q6gEBtAwdQ",
+            "name": "ディスク容量",
+            "type": "host",
+            "metric": "filesystem.vda3.used",
+            "operator": ">",
+            "warning": 6e+10,
+            "critical": 9e+10,
+            "duration": 1
+        },
+        {
+            "id": "2jyNUkg1Pzs",
+            "name": "connectivity",
+            "type": "connectivity",
+            "excludeScopes": [
+                "Private: home"
+            ]
+        }
+    ]
+}
