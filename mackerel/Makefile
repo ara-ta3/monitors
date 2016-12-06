@@ -7,11 +7,14 @@ current=$(shell date "+%Y/%m/%d %H:%M:%S")
 pr_branch=update-monitors-json-$(shell date "+%Y%m%d%H%M")
 pr_text_file=tmp/pr_text_file
 
+check-mackerel-monitors:
+	$(MAKE) diff || $(MAKE) create-pull-request
+
 pull:
 	$(MKR) monitors pull --file-path $(monitors)
 
 diff:
-	$(MKR) monitors diff --file-path $(monitors)
+	$(MKR) monitors diff -e --file-path $(monitors)
 
 create-pull-request: $(HUB) $(HOME)/.config
 	$(MAKE) pull
