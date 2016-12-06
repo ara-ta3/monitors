@@ -18,12 +18,12 @@ diff:
 
 create-pull-request: $(HUB) $(HOME)/.config
 	$(MAKE) pull
-	$(HUB) checkout -b $(pr_branch)
-	$(HUB) add $(monitors)
-	$(HUB) commit -m "Update monitors.json $(current). job: $(job_url)"
-	$(HUB) push origin $(pr_branch)
+	$< checkout -b $(pr_branch)
+	$< add $(monitors)
+	$< commit -m "Update monitors.json $(current). job: $(job_url)"
+	$< push origin $(pr_branch)
 	$(MAKE) $(pr_text_file)
-	$(HUB) pull-request -F $(pr_text_file)
+	$< pull-request -F $(pr_text_file)
 
 $(pr_text_file): tmp
 	echo "Update monitors.json $(current)." > $(pr_text_file)
