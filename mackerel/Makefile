@@ -41,4 +41,4 @@ $(HOME)/.config/hub: $(HUB_CONFIG) $(HOME)/.config
 	cp -f $< $@
 
 $(dirs):
-	mkri -p $@
+	mkdir -p $@
