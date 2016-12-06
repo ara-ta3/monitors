@@ -16,7 +16,7 @@ pull:
 diff:
 	$(MKR) monitors diff -e --file-path $(monitors)
 
-create-pull-request: $(HUB) $(HOME)/.config
+create-pull-request: $(HUB) $(HOME)/.config/hub
 	$(MAKE) pull
 	$< checkout -b $(pr_branch)
 	$< add $(monitors)
