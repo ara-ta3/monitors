@@ -1,5 +1,11 @@
 MKR=$(shell which mkr)
+HUB=bin/hub
+HUB_CONFIG=
+dirs=$(HOME)/.config bin tmp
 monitors=monitors.json
+current=$(shell date "+%Y/%m/%d %H:%M:%S")
+pr_branch=update-monitors-json-$(shell date "+%Y%m%d%H%M")
+pr_text_file=tmp/pr_text_file
 
 pull:
 	$(MKR) monitors pull --file-path $(monitors)
@@ -7,3 +13,29 @@ pull:
 diff:
 	$(MKR) monitors diff --file-path $(monitors)
 
+create-pull-request: $(HUB) $(HOME)/.config
+	$(MAKE) pull
+	$(HUB) checkout -b $(pr_branch)
+	$(HUB) add $(monitors)
+	$(HUB) commit -m "Update monitors.json $(current). job: $(job_url)"
+	$(HUB) push origin $(pr_branch)
+	$(MAKE) $(pr_text_file)
+	$(HUB) pull-request -F $(pr_text_file)
+
+$(pr_text_file): tmp
+	echo "Update monitors.json $(current)." > $(pr_text_file)
+	echo "" >> $(pr_text_file)
+	echo "job: $(job_url)" >> $(pr_text_file)
+	$(MKR) monitors diff --file-path $(monitors) >> $(pr_text_file)
+
+bin/hub: tmp bin
+	wget -O $</hub-linux-amd64-2.2.9.tgz https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz
+	cd $< && tar xzvf hub-linux-amd64-2.2.9.tgz
+	mv $</hub-linux-amd64-2.2.9/bin/hub $@
+	rm -rf $<
+
+$(HOME)/.config/hub: $(HUB_CONFIG) $(HOME)/.config
+	cp -f $< $@
+
+$(dirs):
+	mkri -p $@
