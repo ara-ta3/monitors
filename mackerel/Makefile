@@ -17,12 +17,12 @@ diff:
 	$(MKR) monitors diff -e --file-path $(monitors)
 
 create-pull-request: $(HUB) $(HOME)/.config/hub
+	$(MAKE) $(pr_text_file)
 	$(MAKE) pull
 	$< checkout -b $(pr_branch)
 	$< add $(monitors)
 	$< commit -m "Update monitors.json $(current). job: $(job_url)"
 	$< push origin $(pr_branch)
-	$(MAKE) $(pr_text_file)
 	$< pull-request -F $(pr_text_file)
 
 $(pr_text_file): tmp
